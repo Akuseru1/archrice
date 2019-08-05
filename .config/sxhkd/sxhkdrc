@@ -1,10 +1,14 @@
 # Basic binds
+super + shift + p
+	$TERMINAL -e python /home/arch/Documents/coolApps/terminal-pomodoro/py_alarm.py --volume 1
 super + Return
 	$TERMINAL
 super + d
 	dmenu_run
 super + r
 	$TERMINAL -e $FILE
+super + alt + r
+	$TERMINAL -e sudo $FILE
 super + e
 	$TERMINAL -e neomutt
 super + m

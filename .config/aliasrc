@@ -24,7 +24,13 @@ alias ka="killall" \
 	ref="shortcuts >/dev/null; source ~/.config/shortcutrc" \
 	upc="sudo pacman -Syu; pkill -RTMIN+8 i3blocks" \
 	lsp="pacman -Qett --color=always | less" \
-	ffmpeg="ffmpeg -hide_banner"
+	ffmpeg="ffmpeg -hide_banner"\
+	pycharm="cd /home/arch/Downloads/pycharm-community-2019.1.1/bin && ./pycharm.sh" \
+	bgm="feh --bg-max" \
+	graph="git log --all --decorate --oneline --graph" \
+	p="python" \
+	c="cp /home/arch/Documents/Projects/myfirstC/.ycm_extra_conf.py ." \
+	pm='pomodoro.sh --volume --1'
 
 command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" # Use neovim for vim if present.
 

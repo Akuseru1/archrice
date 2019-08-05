@@ -16,3 +16,6 @@ cfmc	~/.config/ncmpcpp/config
 er	~/Documents/referbib
 cfB	~/.config/i3blocks/config
 cfk	~/.config/sxhkd/sxhkdrc
+cfl	/etc/X11/xorg.conf.d/00-keyboard.conf
+cfr	~/.config/ranger/rc.conf
+cfs	~/.config/shortcutrc

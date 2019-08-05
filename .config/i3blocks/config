@@ -29,11 +29,11 @@ signal=8
 interval=20
 signal=7
 
-[weather]
-interval=18000
-signal=5
+#[weather]
+#interval=18000
+#signal=5
 
-[mailbox]
+#[mailbox]
 label=📬
 interval=180
 signal=12
@@ -69,5 +69,5 @@ interval=30
 [internet]
 interval=10
 
-[help]
-interval=once
+#[help]
+#interval=once

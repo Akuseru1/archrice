@@ -1,4 +1,6 @@
-let mapleader =","
+
+
+let mapleader ="¿"
 
 if ! filereadable(expand('~/.config/nvim/autoload/plug.vim'))
 	echo "Downloading junegunn/vim-plug to manage plugins..."
@@ -18,6 +20,11 @@ Plug 'bling/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'vifm/vifm.vim'
 Plug 'kovetskiy/sxhkd-vim'
+Plug 'vim-syntastic/syntastic'
+"Plug 'SirVer/ultisnips'
+Plug 'ycm-core/YouCompleteMe'
+Plug 'honza/vim-snippets'
+"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 call plug#end()
 
 set bg=light
@@ -25,6 +32,34 @@ set go=a
 set mouse=a
 set nohlsearch
 set clipboard=unnamedplus
+
+
+"My addons
+"For ultsnips
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+"For Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+"for you complete me // this is the difficult one, syntactics and ultsnips works perfectly once you add vim-snippets
+
+"let g:ycm_key_list_select_completion=[]
+"let g:ycm_key_list_previous_completion=[]
+"let g:ycm_use_clangd = 0
+"End my addons
 
 " Some basics:
 	nnoremap c "_c

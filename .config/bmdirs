@@ -2,9 +2,11 @@
 h	~/
 d	~/Documents
 D	~/Downloads
-m	~/Music
 pp	~/Pictures
 vv	~/Videos
 cf	~/.config
-sc	~/.local/bin
+bk	~/Documents/Books
+pj	~/Documents/Projects
+mu	~/Music
+t	~/Downloads/Torrents
 mn	/mnt
