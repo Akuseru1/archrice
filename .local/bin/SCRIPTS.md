@@ -1,4 +1,4 @@
-# Directory of Scripts
+# public Directory of Scripts
 
 I keep all my user-created scripts here in `~/.local/bin/`.  Scripts are sorted
 into sub-directories for easy management, and all are seamlessly added to

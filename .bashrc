@@ -23,6 +23,8 @@ unset __conda_setup
 # <<< conda initialize <<<
 export PATH="$PATH:/home/arch/Documents/coolApps/terminal-pomodoro"
 export wa
-wa() {
-wal --saturate 0.4 -i $1
+export getcodes
+wa() { #use pywal to change background and terminal colors
+wal --saturate 0.4 -i $1 && setbg $1
 }
+

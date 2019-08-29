@@ -1,8 +1,10 @@
 # Basic binds
-super + shift + p
-	$TERMINAL -e python /home/arch/Documents/coolApps/terminal-pomodoro/py_alarm.py --volume 1
+#super + shift + p
+#	$TERMINAL -e python /home/arch/Documents/coolApps/terminal-pomodoro/py_alarm.py --volume 1
 super + Return
 	$TERMINAL
+super + i
+	$TERMINAL -e emacs -nw
 super + d
 	dmenu_run
 super + r
