@@ -1,5 +1,4 @@
 ;; My Configs!!!
-
 ;; had to comment every magit  :c
 
 
@@ -22,7 +21,6 @@
 (add-to-list 'load-path "~/.emacs.d/popup-el")
 (add-to-list 'load-path "~/.emacs.d/emacs-async")
 (add-to-list 'load-path "~/.emacs.d/helm")
-;(add-to-list 'load-path "~/.emacs.d/org-wiki")
 (add-to-list 'load-path "~/.emacs.d/evil-org-mode")
 (add-to-list 'load-path "~/.emacs.d/evil-magit")
 (add-to-list 'load-path "~/.emacs.d/color-theme-approximate")
@@ -31,7 +29,6 @@
 ;; fixes tab for org-mode, must be before require evil!
 
 (setq evil-want-C-i-jump nil)
-
 
 ;; require loads all the libraries that have been added to the path
 
@@ -45,7 +42,6 @@
 (require 'popup)
 (require 'helm)
 (require 'async)
-;(require 'org-wiki)
 (require 'evil-org)
 (require 'color-theme-approximate)
 (require 'helm-bookmark)
@@ -75,7 +71,9 @@
 
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                     ("marmalade" . "http://marmalade-repo.org/packages/") ("melpa" . "http://melpa.org/packages/")))
+			 ("marmalade" . "http://marmalade-repo.org/packages/")
+			 ("melpa" . "http://melpa.org/packages/")))
+
 
 
   (package-initialize)
@@ -126,6 +124,52 @@
 (use-package avy  ;; for jumping around like f in vimium
   :load-path "~/.emacs.d/avy")
 
+;; visual fill column is a writeroom Dependency
+
+(use-package visual-fill-column
+  :load-path "~/.emacs.d/visual-fill-column")
+
+(use-package writeroom-mode
+  :load-path "~/.emacs.d/writeroom-mode")
+
+
+
+;;for syntax checkint
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+;Company for auto-complete
+
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3))
+
+;; to scroll with C-n and C-p
+(defun company-nav ()
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous))
+(with-eval-after-load 'company
+(add-hook 'company-mode-hook 'company-nav)
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+(add-hook 'c-mode-hook 'company-mode)
+(add-hook 'c++-mode-hook 'company-mode))
+
+
+
+;; if writeroom is activated deactivated, otherwise activated with desired width
+
+(defun writeroom-best ()
+  (interactive)
+  (if (eq writeroom-mode t) (writeroom-mode -1)
+    (progn ( writeroom-mode t)
+	   (writeroom-increase-width)
+	   (writeroom-increase-width)
+	   (writeroom-increase-width)
+	   (writeroom-increase-width))))
+
 ;==============================================================
 
 ;Configuration
@@ -135,7 +179,7 @@
 
 (if (display-graphic-p)
     (load-theme 'misterioso t)
-  ) 
+  )
 
 ;;Remaps
 
@@ -191,7 +235,7 @@
 ;                   (aref v 1) (aref v 2)))
 ;       (format "cd '%s'" current-dir))))) ;it will press enter after \n
 ;
-;					
+;
 ;;this lets me save the output of a command
 ;
 ;(defvar pathi (shell-command-to-string pwd))
@@ -211,7 +255,6 @@
 
 ;;=======================
 
-;(setq org-wiki-location "~/org/wiki")
 ;;sets leader key
 
 (evil-leader/set-leader "<SPC>")
@@ -224,12 +267,15 @@
   "d" 'diff-buffer-with-file
   "r" 'dired
   "l" 'org-open-at-point
+  "ms" 'org-stored-links
+  "ml" 'org-insert-link
   "od" 'dired-open-term
   "on" 'newBuffer-ansi-term
   "f" 'find-file
   "ee" 'eval-last-sexp
   "eb" 'eval-buffer
   "p" 'helm-bookmarks
+  "sa" 'save-some-buffers
   "st" 'org-set-tags-command
   "ss" 'flyspell-mode
   "sp" 'split-window-horizontally
@@ -241,6 +287,7 @@
   "gl" 'magit-log-all
   "gi" 'magit-init
   "gb" 'magit-branch
+  "go" 'writeroom-best
   "k" 'kill-buffer)
 
 
@@ -354,7 +401,7 @@
   (interactive)
   (defvar foo)
   (setq foo (concat "gcc " (buffer-name) " && ./a.out" ))
-  (shell-command foo))
+  (shell-command foo)) ;;change to return a string and make it go through ansi-term  function
 
 (global-set-key [C-f1] 'execute-c-program)
 
@@ -439,13 +486,13 @@
 ;; to save evil-marks between sessions
 
 ;;;;;;;;;;;;(add-to-list 'desktop-locals-to-save 'evil-markers-alist)
- 
+
 ;; to be able to use brackets to jump sentences
 
 (setq sentence-end-double-space nil)
 
 
-        
+
 
 
 
@@ -470,8 +517,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-wiki-location-list (quote ("~/org-wiki")))
- '(package-selected-packages (quote (org-wiki xclip evil-magit magit diff-hl))))
+ '(package-selected-packages (quote (flycheck xclip evil-magit magit diff-hl))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
