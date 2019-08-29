@@ -75,9 +75,7 @@
 
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                     ("marmalade" . "http://marmalade-repo.org/packages/")
-                     ("melpa" . "http://melpa.org/packages/")))
-
+                     ("marmalade" . "http://marmalade-repo.org/packages/") ("melpa" . "http://melpa.org/packages/")))
 
 
   (package-initialize)
@@ -144,15 +142,34 @@
 ;; remaps my alt gr key to work as meta
 
 (define-key key-translation-map (kbd "»") (kbd "M-x"))
-(define-key key-translation-map (kbd "ß") (kbd "M-s"))
 (global-set-key (kbd "”")   'evil-leader-mode)
+(global-set-key (kbd "½") 'shrink-window)
+(global-set-key (kbd "ĸ") 'enlarge-window)
+(global-set-key (kbd "ħ") 'shrink-window-horizontally)
+(global-set-key (kbd "ł") 'enlarge-window-horizontally)
+
+;; bind meta hjkl keys to altgr (st bindings dont let you use alt)
+;; define-key + mode-map or state-map lets you LOCALLY bind stuff, (only for that mode), unlike global which changes it for every mode no matter what
+(defun org-nav-hjkl ()
+  (define-key org-mode-map (kbd "ĸ") 'org-metaup)
+  (define-key org-mode-map (kbd "½") 'org-metadown)
+  (define-key org-mode-map (kbd "ł") 'org-metaright)
+  (define-key org-mode-map (kbd "ħ") 'org-metaleft)
+  (define-key org-mode-map (kbd "ß") 'shrink-window)
+  (define-key org-mode-map (kbd "ð") 'enlarge-window)
+  (define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
+  (define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
+
+(add-hook 'org-mode-hook 'org-nav-hjkl)
+
+
 ;; change enter to o <esc> my first try
 (defun enter-func ()
   (interactive)
   (evil-open-below 1)
   (evil-normal-state))
 
-(define-key evil-normal-state-map (kbd "þ") 'enter-func)
+(define-key evil-normal-state-map (kbd "ø") 'enter-func)
 
 (defun newBuffer-ansi-term ()
   (interactive)
@@ -207,20 +224,19 @@
   "d" 'diff-buffer-with-file
   "r" 'dired
   "l" 'org-open-at-point
-  "ñd" 'dired-open-term
-  "ñs" 'newBuffer-ansi-term
+  "od" 'dired-open-term
+  "on" 'newBuffer-ansi-term
   "f" 'find-file
   "ee" 'eval-last-sexp
   "eb" 'eval-buffer
   "p" 'helm-bookmarks
   "st" 'org-set-tags-command
   "ss" 'flyspell-mode
-  "sp" 'flyspell-prog-mode
+  "sp" 'split-window-horizontally
   "sb" 'flyspell-buffer
   "ma" 'which-key-show-top-level
   "mm" 'which-key-show-major-mode
   "b" 'switch-to-buffer
-  "o" 'org-mode
   "gs" 'magit-status
   "gl" 'magit-log-all
   "gi" 'magit-init
@@ -432,14 +448,6 @@
         
 
 
-
-;;change buffer sizes for split windows
-
-
-(global-set-key (kbd "ł") 'shrink-window)
-(global-set-key (kbd "ĸ") 'enlarge-window)
-(global-set-key (kbd "→") 'shrink-window-horizontally)
-(global-set-key (kbd "ø") 'enlarge-window-horizontally)
 
 ;; so that the lines always stay on screen
 ;; made org-mode crash!!!!!!!!!!!!!!
