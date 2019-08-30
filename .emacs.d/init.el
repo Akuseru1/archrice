@@ -214,7 +214,7 @@
 
 ;;add go back functionality in terminal to Info mode
 (add-hook 'help-mode-hook
-	  (lambda () 
+	  (lambda ()
 	    (define-key help-mode-map (kbd "SPC-l") 'help-go-back)))
 ;; remaps my alt gr key to work as meta
 
@@ -226,18 +226,22 @@
 (global-set-key (kbd "ł") 'enlarge-window-horizontally)
 
 ;; bind meta hjkl keys to altgr (st bindings dont let you use alt)
-;; define-key + mode-map or state-map lets you LOCALLY bind stuff, (only for that mode), unlike global which changes it for every mode no matter what
-;;(defun org-nav-hjkl ()
-;;  (define-key org-mode-map (kbd "ĸ") 'org-metaup)
-;;  (define-key org-mode-map (kbd "½") 'org-metadown)
-;;  (define-key org-mode-map (kbd "ł") 'org-metaright)
-;;  (define-key org-mode-map (kbd "ħ") 'org-metaleft)
-;;  (define-key org-mode-map (kbd "ß") 'shrink-window)
-;;  (define-key org-mode-map (kbd "ð") 'enlarge-window)
-;;  (define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
-;;  (define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
-;;
-;;(add-hook 'org-mode-hook 'org-nav-hjkl)
+;; define-key + mode-m-ap or state-map lets you LOCALLY bind stuff, (only for that mode), unlike global which changes it for every mode no matter what
+
+(defun org-nav-hjkl ()
+  ;; sets the variable so that enter actually enters links (it doesnt by default)
+(setq org-return-follows-link t)
+(define-key evil-motion-state-map (kbd "RET") nil))
+(define-key org-mode-map (kbd "ĸ") 'org-metaup)
+(define-key org-mode-map (kbd "½") 'org-metadown)
+(define-key org-mode-map (kbd "ł") 'org-metaright)
+(define-key org-mode-map (kbd "ħ") 'org-metaleft)
+(define-key org-mode-map (kbd "ß") 'shrink-window)
+(define-key org-mode-map (kbd "ð") 'enlarge-window)
+(define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
+(define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally)
+
+(add-hook 'org-mode-hook 'org-nav-hjkl)
 
 
 ;; change enter to o <esc> my first try
@@ -304,10 +308,10 @@
   "b" 'switch-to-buffer
   "<f1>" 'bookmark-bmenu-list
   "<f2>" 'bookmark-set-no-overwrite
-  "<f3>" 'bookmark--jump
+  "<f3>" 'bookmark-jump
   "d" 'diff-buffer-with-file
   "r" 'dired
-  ;"l" (if (bound-and-true-p org-mode) 'org-open-at-point 'Info-history-back)
+  "l" (if (bound-and-true-p org-mode) 'org-open-at-point 'Info-history-back)
   "ms" 'org-stored-links
   "ml" 'org-insert-link
   "od" 'dired-open-term
