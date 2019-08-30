@@ -1,6 +1,17 @@
 ;; My Configs!!!
-;; had to comment every magit  :c
 
+;; install from internet
+
+;;company
+;;company-irony
+;;irony
+;;writeroom
+;;doom-mode
+
+;; dependencies to install
+
+;; clang for company
+;; llvm for company
 
 ;;this installs use-package
 ;; This is only needed once, near the top of the file
@@ -139,7 +150,7 @@
   :ensure t
   :init (global-flycheck-mode))
 
-;Company for auto-complete
+;;Company for auto-complete
 
 (use-package company
   :ensure t
@@ -151,12 +162,28 @@
 (defun company-nav ()
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous))
+
+
+;;for c programming autocomplete
+
+(use-package company-irony
+  :ensure t
+  :config
+  (require 'company)
+  (add-to-list 'company-backends 'company-irony))
+
+(use-package irony
+  :ensure t
+  :config
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook '(irony-cdb-autosetup-compile-options)))
+  ;;set up Hooks
 (with-eval-after-load 'company
 (add-hook 'company-mode-hook 'company-nav)
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
 (add-hook 'c-mode-hook 'company-mode)
 (add-hook 'c++-mode-hook 'company-mode))
-
 
 
 ;; if writeroom is activated deactivated, otherwise activated with desired width
@@ -288,6 +315,7 @@
   "gi" 'magit-init
   "gb" 'magit-branch
   "go" 'writeroom-best
+  "gi" 'writeroom-increase-width
   "k" 'kill-buffer)
 
 
@@ -403,7 +431,7 @@
   (setq foo (concat "gcc " (buffer-name) " && ./a.out" ))
   (shell-command foo)) ;;change to return a string and make it go through ansi-term  function
 
-(global-set-key [C-f1] 'execute-c-program)
+(global-set-key [c-f1] 'execute-c-program)
 
 ;; to make scrolling smoother:
 (setq redisplay-dont-pause t
