@@ -227,17 +227,17 @@
 
 ;; bind meta hjkl keys to altgr (st bindings dont let you use alt)
 ;; define-key + mode-map or state-map lets you LOCALLY bind stuff, (only for that mode), unlike global which changes it for every mode no matter what
-(defun org-nav-hjkl ()
-  (define-key org-mode-map (kbd "ĸ") 'org-metaup)
-  (define-key org-mode-map (kbd "½") 'org-metadown)
-  (define-key org-mode-map (kbd "ł") 'org-metaright)
-  (define-key org-mode-map (kbd "ħ") 'org-metaleft)
-  (define-key org-mode-map (kbd "ß") 'shrink-window)
-  (define-key org-mode-map (kbd "ð") 'enlarge-window)
-  (define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
-  (define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
-
-(add-hook 'org-mode-hook 'org-nav-hjkl)
+;;(defun org-nav-hjkl ()
+;;  (define-key org-mode-map (kbd "ĸ") 'org-metaup)
+;;  (define-key org-mode-map (kbd "½") 'org-metadown)
+;;  (define-key org-mode-map (kbd "ł") 'org-metaright)
+;;  (define-key org-mode-map (kbd "ħ") 'org-metaleft)
+;;  (define-key org-mode-map (kbd "ß") 'shrink-window)
+;;  (define-key org-mode-map (kbd "ð") 'enlarge-window)
+;;  (define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
+;;  (define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
+;;
+;;(add-hook 'org-mode-hook 'org-nav-hjkl)
 
 
 ;; change enter to o <esc> my first try
