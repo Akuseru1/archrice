@@ -424,14 +424,24 @@
 
 ;;Compilers!!!
 
-;; Run C programs directly from within emacs
 (defun execute-c-program ()
   (interactive)
   (defvar foo)
-  (setq foo (concat "gcc " (buffer-name) " && ./a.out" ))
-  (shell-command foo)) ;;change to return a string and make it go through ansi-term  function
+  (save-buffer)
+  (setq foo (concat "gcc " (buffer-name) " && ./a.out \n" ))
+  (split-window-vertically)
+  (evil-window-down 1)
+  (term-send-string (ansi-term "bash") foo))
 
-(global-set-key [c-f1] 'execute-c-program)
+;; Run C programs directly from within emacs
+;;(defun execute-c-program ()
+;;  (interactive)
+;;  (defvar foo)
+;;  (save-buffer)
+;;  (setq foo (concat "gcc " (buffer-name) " && ./a.out" ))
+;;  (shell-command foo)) ;;change to return a string and make it go through ansi-term  function
+
+(global-set-key [f25] 'execute-c-program)
 
 ;; to make scrolling smoother:
 (setq redisplay-dont-pause t
