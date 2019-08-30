@@ -12,6 +12,7 @@
 
 ;; clang for company
 ;; llvm for company
+;; dont forget to run irony-install-server in a c file
 
 ;;this installs use-package
 ;; This is only needed once, near the top of the file
@@ -202,6 +203,7 @@
 ;Configuration
 ;; Themes
 
+
 ;; activate theme only in normal emacs
 
 (if (display-graphic-p)
@@ -210,6 +212,10 @@
 
 ;;Remaps
 
+;;add go back functionality in terminal to Info mode
+(add-hook 'help-mode-hook
+	  (lambda () 
+	    (define-key help-mode-map (kbd "SPC-l") 'help-go-back)))
 ;; remaps my alt gr key to work as meta
 
 (define-key key-translation-map (kbd "»") (kbd "M-x"))
@@ -288,12 +294,20 @@
 
 ;; leader shortcuts
 
+;; if (bound-and-true-p "mode") checks if a mode is active
+
+;; use M-n to open hyperlinks in new buffers
+
 ;;to follow links in org mode you have to put (org-open-at-point) in the function file
 (evil-leader/set-key
   "w" 'avy-goto-char
+  "b" 'switch-to-buffer
+  "<f1>" 'bookmark-bmenu-list
+  "<f2>" 'bookmark-set-no-overwrite
+  "<f3>" 'bookmark--jump
   "d" 'diff-buffer-with-file
   "r" 'dired
-  "l" 'org-open-at-point
+  ;"l" (if (bound-and-true-p org-mode) 'org-open-at-point 'Info-history-back)
   "ms" 'org-stored-links
   "ml" 'org-insert-link
   "od" 'dired-open-term
@@ -305,17 +319,17 @@
   "sa" 'save-some-buffers
   "st" 'org-set-tags-command
   "ss" 'flyspell-mode
-  "sp" 'split-window-horizontally
+;  "sp" 'split-window-horizontally ;; C-x 3 does this already
   "sb" 'flyspell-buffer
   "ma" 'which-key-show-top-level
   "mm" 'which-key-show-major-mode
-  "b" 'switch-to-buffer
   "gs" 'magit-status
   "gl" 'magit-log-all
   "gi" 'magit-init
   "gb" 'magit-branch
   "go" 'writeroom-best
   "gi" 'writeroom-increase-width
+  "gp" 'writeroom-decrease-width
   "k" 'kill-buffer)
 
 
