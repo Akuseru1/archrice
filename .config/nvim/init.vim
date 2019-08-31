@@ -1,6 +1,5 @@
 let mapleader =","
 "use leader + w + w
-let g:EasyMotion_leader_key = 'w'
 map <Leader>w <Plug>(easymotion-prefix)
 
 "this allows me to use :find to find anything anywhere

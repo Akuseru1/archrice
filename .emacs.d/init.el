@@ -1,5 +1,6 @@
 ;; My Configs!!!
 
+;; dont forget to do M-x all-the-font-install
 ;; install from internet
 
 ;;company
@@ -61,6 +62,11 @@
 ;; adds option prompts for shortcuts after pressing a key binding
 (add-to-list 'load-path "~/.emacs.d/emacs-which-key")
 (require 'which-key)
+
+(add-hook 'org-mode-hook 'evil-org-mode)
+(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(require 'evil-org-agenda)
+(evil-org-agenda-set-keys)
 ;============================= init some modes
 (setq which-key-idle-delay 0.01)
 (which-key-mode)
@@ -231,7 +237,10 @@
 (defun org-nav-hjkl ()
   ;; sets the variable so that enter actually enters links (it doesnt by default)
 (setq org-return-follows-link t)
-(define-key evil-motion-state-map (kbd "RET") nil))
+(define-key evil-motion-state-map (kbd "RET") nil)) ;;to activate org-return and enter links
+(define-key org-mode-map (kbd "C-RET")'org-insert-heading-respect-content) ;; to create a new heading
+;(define-key evil-org-mode-map (kbd "o") nil)
+;(define-key org-mode-map (kbd "o") 'evil-open-below)
 (define-key org-mode-map (kbd "ĸ") 'org-metaup)
 (define-key org-mode-map (kbd "½") 'org-metadown)
 (define-key org-mode-map (kbd "ł") 'org-metaright)
@@ -462,12 +471,14 @@
 (global-set-key [f25] 'execute-c-program)
 
 ;; to make scrolling smoother:
-(setq redisplay-dont-pause t
-      scroll-margin 1
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1)
-
+;(setq redisplay-dont-pause t
+;      scroll-margin 1
+;      scroll-step 1
+;      scroll-conservatively 10000
+;      scroll-preserve-screen-position 1)
+(setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
+(setq mouse-wheel-scroll-amount '(1)) ;; mouse scroll moves 1 line at a time, instead of 5 lines
+(setq mouse-wheel-progressive-speed nil) ;; on a long mouse scroll keep scrolling by 1 line
 
 ;; Add powerline theme!
 

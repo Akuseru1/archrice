@@ -10,7 +10,7 @@ evil-leader	https://github.com/cofi/evil-leader.git
 popup-el	https://github.com/auto-complete/popup-el
 async		https://github.com/jwiegley/emacs-async
 helm		https://github.com/emacs-helm/helm
-evil-org	https://github.com/edwtjo/evil-org-mode
+evil-org	https://github.com/Somelauw/evil-org-mode
 evil-magit	https://github.com/emacs-evil/evil-magit
 avy		https://github.com/abo-abo/avy
 col-theme-apro	https://github.com/tungd/color-theme-approximate
