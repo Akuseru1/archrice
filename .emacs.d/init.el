@@ -15,10 +15,23 @@
 ;; llvm for company
 ;; dont forget to run irony-install-server in a c file
 
+
+;;programs i can disable
+
+
+
+
+;; it should fix the scrolling
+(setq auto-window-vscroll nil)
+(setq-default display-line-numbers 'relative)
+
+
+
+
 ;;this installs use-package
 ;; This is only needed once, near the top of the file
 (eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+;;; code: Following line is not needed if use-package.el is in ~/.emacs.d
   (add-to-list 'load-path "~/.emacs.d/use-package")
   (require 'use-package))
 
@@ -85,6 +98,7 @@
 (global-evil-surround-mode 1)
 
 
+
 ; Repositories
 
 (require 'package)
@@ -96,7 +110,8 @@
 
   (package-initialize)
 
-
+;; so that it uses the load-path to check for the right packages installed
+(setq-default flycheck-emacs-lisp-load-path 'inherit)
 ;;checks if magit is installed
 
 
@@ -155,7 +170,7 @@
 ;;for syntax checkint
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode))
+  :init (add-hook 'c-mode-hook 'flycheck-mode))
 
 ;;Company for auto-complete
 
@@ -199,7 +214,7 @@
   (interactive)
   (if (eq writeroom-mode t) (writeroom-mode -1)
     (progn ( writeroom-mode t)
-	   (writeroom-increase-width)
+	  (writeroom-increase-width)
 	   (writeroom-increase-width)
 	   (writeroom-increase-width)
 	   (writeroom-increase-width))))
@@ -389,14 +404,14 @@
 
 
 ;; native line numbers
-
-(setq-default display-line-numbers 'visual
-              display-line-numbers-current-absolute t
-              display-line-numbers-width 0
-              display-line-numbers-widen t)
-(set-face-attribute 'line-number nil)
-(set-face-attribute 'line-number-current-line nil
-                    :background nil :foreground "#9E3A01")
+;; possibly deprecated
+;;(setq-default display-line-numbers 'visual
+;;              display-line-numbers-current-absolute t
+;;              display-line-numbers-width 0
+;;              display-line-numbers-widen t)
+;;(set-face-attribute 'line-number nil)
+;;(set-face-attribute 'line-number-current-line nil
+;;                    :background nil :foreground "#9E3A01")
 
 
 
@@ -476,10 +491,13 @@
 ;      scroll-step 1
 ;      scroll-conservatively 10000
 ;      scroll-preserve-screen-position 1)
-(setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
-(setq mouse-wheel-scroll-amount '(1)) ;; mouse scroll moves 1 line at a time, instead of 5 lines
-(setq mouse-wheel-progressive-speed nil) ;; on a long mouse scroll keep scrolling by 1 line
-
+;(setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
+;(setq mouse-wheel-scroll-amount '(1)) ;; mouse scroll moves 1 line at a time, instead of 5 lines
+;(setq mouse-wheel-progressive-speed nil) ;; on a long mouse scroll keep scrolling by 1 line
+(setq scroll-margin 1
+scroll-conservatively 2000)
+(setq-default scroll-up-aggressively 0.01
+scroll-down-aggressively 0.01)
 ;; Add powerline theme!
 
 ;;(add-to-list 'load-path "~/.emacs.d/powerline")
@@ -575,7 +593,25 @@
 (define-key helm-map (kbd "C-j") 'helm-next-line)
 (define-key helm-map (kbd "C-k") 'helm-previous-line)
 
+;; alpha for GUI
 
+ ;;(set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>))
+ ;;(set-frame-parameter (selected-frame) 'alpha <both>)
+ (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+ (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+
+ (defun toggle-transparency ()
+   (interactive)
+   (let ((alpha (frame-parameter nil 'alpha)))
+     (set-frame-parameter
+      nil 'alpha
+      (if (eql (cond ((numberp alpha) alpha)
+                     ((numberp (cdr alpha)) (cdr alpha))
+                     ;; Also handle undocumented (<active> <inactive>) form.
+                     ((numberp (cadr alpha)) (cadr alpha)))
+               100)
+          '(85 . 50) '(100 . 100)))))
+ (global-set-key (kbd "C-c t") 'toggle-transparency)
 ;;=====================================================================
 
 
