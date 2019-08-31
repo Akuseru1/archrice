@@ -23,7 +23,7 @@
 
 ;; it should fix the scrolling
 (setq auto-window-vscroll nil)
-(setq-default display-line-numbers 'relative)
+;(setq-default display-line-numbers 'relative)
 
 
 
@@ -50,7 +50,6 @@
 (add-to-list 'load-path "~/.emacs.d/evil-org-mode")
 (add-to-list 'load-path "~/.emacs.d/evil-magit")
 (add-to-list 'load-path "~/.emacs.d/color-theme-approximate")
-;(add-to-list 'load-path "~/.emacs.d/doom-modeline")
 
 ;; fixes tab for org-mode, must be before require evil!
 
@@ -77,7 +76,7 @@
 (require 'which-key)
 
 (add-hook 'org-mode-hook 'evil-org-mode)
-(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(evil-org-set-key-theme '(navigation insert textobjects additional calendar shift))
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
 ;============================= init some modes
@@ -96,7 +95,6 @@
 (global-set-key [(control ?.)] 'goto-last-change)
 (global-set-key [(control ?,)] 'goto-last-change-reverse)
 (global-evil-surround-mode 1)
-
 
 
 ; Repositories
@@ -219,11 +217,21 @@
 	   (writeroom-increase-width)
 	   (writeroom-increase-width))))
 
+;; for side lines
+(use-package nlinum-relative
+  :config
+;; something else you want
+;  (nlinum-relative-setup-evil)
+  (add-hook 'prog-mode-hook 'nlinum-relative-mode))
+
+(setq nlinum-relative-redisplay-delay 0.3)      ;; delay
+(setq nlinum-relative-current-symbol "")      ;; or "" for display current line number
+(setq nlinum-format "%d    ") ;; padding!
+(setq nlinum-relative-offset 0)
 ;==============================================================
 
 ;Configuration
 ;; Themes
-
 
 ;; activate theme only in normal emacs
 
@@ -248,14 +256,18 @@
 
 ;; bind meta hjkl keys to altgr (st bindings dont let you use alt)
 ;; define-key + mode-m-ap or state-map lets you LOCALLY bind stuff, (only for that mode), unlike global which changes it for every mode no matter what
+(eval-after-load "evil-maps"
+  (dolist (map '(evil-motion-state-map
+                 evil-insert-state-map
+                 evil-emacs-state-map))
+    (define-key (eval map) "\C-o" nil)))
 
+(define-key input-decode-map "^O" [C-<S-o>]) ;; defines my escape key for shift
 (defun org-nav-hjkl ()
   ;; sets the variable so that enter actually enters links (it doesnt by default)
 (setq org-return-follows-link t)
-(define-key evil-motion-state-map (kbd "RET") nil)) ;;to activate org-return and enter links
-(define-key org-mode-map (kbd "C-RET")'org-insert-heading-respect-content) ;; to create a new heading
-;(define-key evil-org-mode-map (kbd "o") nil)
-;(define-key org-mode-map (kbd "o") 'evil-open-below)
+(define-key evil-motion-state-map (kbd "RET") nil) ;;to activate org-return and enter links
+(define-key org-mode-map (kbd "C-o") 'org-insert-heading) ;; to create a new heading
 (define-key org-mode-map (kbd "ĸ") 'org-metaup)
 (define-key org-mode-map (kbd "½") 'org-metadown)
 (define-key org-mode-map (kbd "ł") 'org-metaright)
@@ -263,10 +275,11 @@
 (define-key org-mode-map (kbd "ß") 'shrink-window)
 (define-key org-mode-map (kbd "ð") 'enlarge-window)
 (define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
-(define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally)
+(define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
 
 (add-hook 'org-mode-hook 'org-nav-hjkl)
-
+(global-set-key (kbd "M-b") 'evil-jump-backward)
+(global-set-key (kbd "M-f") 'evil-jump-forward)
 
 ;; change enter to o <esc> my first try
 (defun enter-func ()
@@ -338,8 +351,9 @@
   "l" (if (bound-and-true-p org-mode) 'org-open-at-point 'Info-history-back)
   "ms" 'org-stored-links
   "ml" 'org-insert-link
-  "od" 'dired-open-term
-  "on" 'newBuffer-ansi-term
+  "o" 'org-insert-heading-respect-content 
+  "td" 'dired-open-term
+  "tn" 'newBuffer-ansi-term
   "f" 'find-file
   "ee" 'eval-last-sexp
   "eb" 'eval-buffer
@@ -612,6 +626,12 @@ scroll-down-aggressively 0.01)
                100)
           '(85 . 50) '(100 . 100)))))
  (global-set-key (kbd "C-c t") 'toggle-transparency)
+
+;; evil-org mode variables
+
+(setq org-special-ctrl-a/e t)
+(setq evil-org-special-o/O '(table-row item))
+
 ;;=====================================================================
 
 
@@ -620,7 +640,9 @@ scroll-down-aggressively 0.01)
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (flycheck xclip evil-magit magit diff-hl))))
+ '(package-selected-packages
+   (quote
+    (nlinum-relative flycheck xclip evil-magit magit diff-hl))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
