@@ -1,1 +1,1 @@
-map bg shell setbg
+map bg shell setbg %s

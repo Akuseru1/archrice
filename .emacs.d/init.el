@@ -1,5 +1,7 @@
 ;; My Configs!!!
 
+
+
 ;; dont forget to do M-x all-the-font-install
 ;; install from internet
 
@@ -18,12 +20,12 @@
 
 ;;programs i can disable
 
-
+; display-line-numbers, tends to get slow in large files, so you should use nlinum-relative for those
 
 
 ;; it should fix the scrolling
 (setq auto-window-vscroll nil)
-;(setq-default display-line-numbers 'relative)
+(setq-default display-line-numbers 'relative)
 
 
 
@@ -217,17 +219,44 @@
 	   (writeroom-increase-width)
 	   (writeroom-increase-width))))
 
-;; for side lines
-(use-package nlinum-relative
-  :config
-;; something else you want
-;  (nlinum-relative-setup-evil)
-  (add-hook 'prog-mode-hook 'nlinum-relative-mode))
+;; for line numbers dont forget to disable display-line-numbers
 
-(setq nlinum-relative-redisplay-delay 0.3)      ;; delay
-(setq nlinum-relative-current-symbol "")      ;; or "" for display current line number
-(setq nlinum-format "%d    ") ;; padding!
-(setq nlinum-relative-offset 0)
+
+;;use-package nlinum-relative
+;;  :config
+;;;; something else you want
+;;  ;(nlinum-relative-setup-evil)
+;;
+;;  ;;modes to have lines
+;;  (add-hook 'org-mode-hook 'nlinum-relative-mode)
+;;  (add-hook 'prog-mode-hook 'nlinum-relative-mode))
+;;
+;;(setq nlinum-relative-redisplay-delay 0.2)      ;; delay
+;;(setq nlinum-relative-current-symbol "")      ;; or "" for display current line number
+;;(setq nlinum-format "%d    ") ;; padding!
+;;(setq nlinum-relative-offset 0)
+
+;; for using bibliographies in org-mode
+
+(use-package org-ref
+  :ensure t
+  :config
+  (setq reftex-default-bibliography '("~/org/bib/references.bib"))
+  (setq org-ref-bibliography-notes "~/bib/notes.org"
+	org-ref-default-bibliography '("~/org/bib/references.bib")
+	org-ref-pdf-directory "~/org/latex-pdfs")
+  (setq bibtex-completion-bibliography "~/org/bib/references.bib"
+	bibtex-completion-library-path "~/org/latex-pdfs"
+	bibtex-completion-notes-path "~/bib/helm-bibtex-notes")
+
+  ;; open pdf with system pdf viewer (works on mac)
+  (setq bibtex-completion-pdf-open-function
+	(lambda (fpath)
+	  (start-process "open" "*open*" "open" fpath)))
+  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f")))
+
+;; alternative
+;; (setq bibtex-completion-pdf-open-function 'org-open-file)
 ;==============================================================
 
 ;Configuration
@@ -239,7 +268,7 @@
     (load-theme 'misterioso t)
   )
 
-;;Remaps
+;;Remaps ======================================================
 
 ;;add go back functionality in terminal to Info mode
 (add-hook 'help-mode-hook
@@ -263,6 +292,9 @@
     (define-key (eval map) "\C-o" nil)))
 
 (define-key input-decode-map "^O" [C-<S-o>]) ;; defines my escape key for shift
+
+
+;; defines most org-mode navigation bindings
 (defun org-nav-hjkl ()
   ;; sets the variable so that enter actually enters links (it doesnt by default)
 (setq org-return-follows-link t)
@@ -277,7 +309,27 @@
 (define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
 (define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
 
+;; so that it adds all the non interactive functions to the apropos page in help
+(setq apropos-do-all t)
+;;org mode ======================================================
+
 (add-hook 'org-mode-hook 'org-nav-hjkl)
+;;so that the headings indent themselves
+(add-hook 'org-mode-hook 'org-indent-mode)
+;; so that yanking will include subtrees
+(setq org-yank-adjusted-subtrees t)
+
+;; set this only when you are exporting latex to pdf
+(defun kdm/org-save-and-export ()
+  (interactive)
+  (if (and (eq major-mode 'org-mode)
+	   (ido-local-file-exists-p (concat (file-name-sans-extension (buffer-name)) ".pdf")))
+      (org-latex-export-to-pdf)))
+
+(add-hook 'after-save-hook 'kdm/org-save-and-export)
+
+
+;; to jump between buffers
 (global-set-key (kbd "M-b") 'evil-jump-backward)
 (global-set-key (kbd "M-f") 'evil-jump-forward)
 
@@ -351,9 +403,10 @@
   "l" (if (bound-and-true-p org-mode) 'org-open-at-point 'Info-history-back)
   "ms" 'org-stored-links
   "ml" 'org-insert-link
-  "o" 'org-insert-heading-respect-content 
+  "o" 'org-insert-heading-respect-content
   "td" 'dired-open-term
   "tn" 'newBuffer-ansi-term
+  "tp" 'org-cut-special
   "f" 'find-file
   "ee" 'eval-last-sexp
   "eb" 'eval-buffer
@@ -530,6 +583,7 @@ scroll-down-aggressively 0.01)
 ;; correct words using f12
 
 (global-set-key (kbd "<f12>") 'flyspell-auto-correct-previous-word)
+(global-set-key (kbd "<f11>") 'flyspell-auto-correct-word)
 
 ;; change dictionary using flyspell
 
@@ -575,7 +629,7 @@ scroll-down-aggressively 0.01)
 
 (global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
 
-(global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/org/wiki/Semestre_5.org")))
+(global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/org/wiki/Semestre5/Semestre_5.org")))
 
 ;; to show matching brackets
 
@@ -611,6 +665,8 @@ scroll-down-aggressively 0.01)
 
  ;;(set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>))
  ;;(set-frame-parameter (selected-frame) 'alpha <both>)
+
+(if (display-graphic-p)
  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
  (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
 
@@ -625,12 +681,18 @@ scroll-down-aggressively 0.01)
                      ((numberp (cadr alpha)) (cadr alpha)))
                100)
           '(85 . 50) '(100 . 100)))))
- (global-set-key (kbd "C-c t") 'toggle-transparency)
+ (global-set-key (kbd "C-c t") 'toggle-transparency))
 
 ;; evil-org mode variables
 
 (setq org-special-ctrl-a/e t)
 (setq evil-org-special-o/O '(table-row item))
+
+
+;;so that splitting windows changes to them automatically
+
+(global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
+(global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
 
 ;;=====================================================================
 
@@ -640,9 +702,10 @@ scroll-down-aggressively 0.01)
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-files (quote ("~/org/wiki/exporting.org")))
  '(package-selected-packages
    (quote
-    (nlinum-relative flycheck xclip evil-magit magit diff-hl))))
+    (org-ref nlinum-relative flycheck xclip evil-magit magit diff-hl))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
