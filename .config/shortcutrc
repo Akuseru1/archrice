@@ -11,6 +11,7 @@ pj="cd ~/Documents/Projects && ls -a" \
 mu="cd ~/Music && ls -a" \
 t="cd ~/Downloads/Torrents && ls -a" \
 mn="cd /mnt && ls -a" \
+o="cd ~/org && ls -a" \
 bf="$EDITOR ~/.config/bmfiles" \
 bd="$EDITOR ~/.config/bmdirs" \
 cfb="$EDITOR ~/.bashrc" \

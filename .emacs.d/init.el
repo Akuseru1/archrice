@@ -30,7 +30,7 @@
 
 
 
-;;this installs use-package
+;this installs use-package
 ;; This is only needed once, near the top of the file
 (eval-when-compile
 ;;; code: Following line is not needed if use-package.el is in ~/.emacs.d
@@ -38,6 +38,7 @@
   (require 'use-package))
 
 ;; =================>>>>  make sure to run the emacsDependencies script beforehand
+
 ;;adds the libraries to the path
 (add-to-list 'load-path "~/.emacs.d/undo-tree")
 (add-to-list 'load-path "~/.emacs.d/evil")
@@ -52,7 +53,7 @@
 (add-to-list 'load-path "~/.emacs.d/evil-org-mode")
 (add-to-list 'load-path "~/.emacs.d/evil-magit")
 (add-to-list 'load-path "~/.emacs.d/color-theme-approximate")
-
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 ;; fixes tab for org-mode, must be before require evil!
 
 (setq evil-want-C-i-jump nil)
@@ -132,7 +133,6 @@
 
 ; some installs using use-package
 
-
 ;; learning to use use-package to install packages and only use them when needed
 
 (use-package doom-modeline
@@ -200,12 +200,39 @@
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook '(irony-cdb-autosetup-compile-options)))
-  ;;set up Hooks
+
+; python
+
+;(use-package jedi-core
+;  :ensure t
+;  :config
+;  (add-hook 'python-mode-hook 'jedi-mode))
+;
+;(use-package company-jedi
+;  :ensure t
+;  :config
+;  (require 'company)
+;  (add-to-list 'company-backends 'company-jedi))
+;
+;;; this is for an error in virtual environments
+;(setq py-python-command "")
+;(setq jedi:environment-root (quote ROOT_DIR/envs/NAME_1))
+
+;;;set up Hooks FOR AUTOCOMPLETE
+
+(use-package company-anaconda
+  :ensure t
+  :config (eval-after-load "company"
+ '(add-to-list 'company-backends 'company-anaconda)))
+
 (with-eval-after-load 'company
 (add-hook 'company-mode-hook 'company-nav)
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
 (add-hook 'c-mode-hook 'company-mode)
-(add-hook 'c++-mode-hook 'company-mode))
+(add-hook 'c++-mode-hook 'company-mode)
+(add-hook 'python-mode-hook 'company-mode)
+(add-hook 'python-mode-hook 'anaconda-mode)
+)
 
 
 ;; if writeroom is activated deactivated, otherwise activated with desired width
@@ -257,6 +284,7 @@
 
 ;; alternative
 ;; (setq bibtex-completion-pdf-open-function 'org-open-file)
+
 ;==============================================================
 
 ;Configuration
@@ -265,7 +293,8 @@
 ;; activate theme only in normal emacs
 
 (if (display-graphic-p)
-    (load-theme 'misterioso t)
+  (load-theme 'dracula t)
+  ;;(load-theme 'misterioso t)
   )
 
 ;;Remaps ======================================================
@@ -297,18 +326,24 @@
 ;; defines most org-mode navigation bindings
 (defun org-nav-hjkl ()
   ;; sets the variable so that enter actually enters links (it doesnt by default)
-(setq org-return-follows-link t)
-(define-key evil-motion-state-map (kbd "RET") nil) ;;to activate org-return and enter links
-(define-key org-mode-map (kbd "C-o") 'org-insert-heading) ;; to create a new heading
-(define-key org-mode-map (kbd "ĸ") 'org-metaup)
-(define-key org-mode-map (kbd "½") 'org-metadown)
-(define-key org-mode-map (kbd "ł") 'org-metaright)
-(define-key org-mode-map (kbd "ħ") 'org-metaleft)
-(define-key org-mode-map (kbd "ß") 'shrink-window)
-(define-key org-mode-map (kbd "ð") 'enlarge-window)
-(define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
-(define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
+  (setq org-return-follows-link t)
+  (define-key evil-motion-state-map (kbd "RET") nil) ;;to activate org-return and enter links
+  (define-key org-mode-map (kbd "C-o") 'org-insert-heading) ;; to create a new heading
+  (define-key org-mode-map (kbd "ĸ") 'org-metaup)
+  (define-key org-mode-map (kbd "½") 'org-metadown)
+  (define-key org-mode-map (kbd "ł") 'org-metaright)
+  (define-key org-mode-map (kbd "ħ") 'org-metaleft)
+  (define-key org-mode-map (kbd "ß") 'shrink-window)
+  (define-key org-mode-map (kbd "ð") 'enlarge-window)
+  (define-key org-mode-map (kbd "æ") 'shrink-window-horizontally)
+  (define-key org-mode-map (kbd "đ") 'enlarge-window-horizontally))
 
+;;to disable todo functions and re-enable evil functionality for shift H
+
+;; for fixing it https://emacs.stackexchange.com/questions/22286/shiftarrow-to-change-window-does-not-work-in-org-mode/38443
+;;(setq org-support-shift-select 'always)
+;;(add-hook 'org-shiftleft-final-hook nil)
+;;(add-hook 'org-shiftright-final-hook nil)
 ;; so that it adds all the non interactive functions to the apropos page in help
 (setq apropos-do-all t)
 ;;org mode ======================================================
@@ -329,6 +364,23 @@
 (add-hook 'after-save-hook 'kdm/org-save-and-export)
 
 
+;; adds more options to TODO in org
+
+(setq org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+
+(setq org-todo-keyword-faces
+
+      '(("TODO":foreground "purple" :weight bold :underline t)
+
+	("DONE" :foreground "orange" :weight bold :underline t)
+
+	("INPROGRESS" :foreground "blue" :weight bold :underline t)
+
+	("WAITING" :foreground "green" :weight bold :underline t)
+
+	("CANCELLED" :foreground "red" :weight bold :underline t)))
+;; to add the timestamp with org-todo
+(setq org-log-done 'time)
 ;; to jump between buffers
 (global-set-key (kbd "M-b") 'evil-jump-backward)
 (global-set-key (kbd "M-f") 'evil-jump-forward)
@@ -404,6 +456,7 @@
   "ms" 'org-stored-links
   "ml" 'org-insert-link
   "o" 'org-insert-heading-respect-content
+  "tt" 'org-todo
   "td" 'dired-open-term
   "tn" 'newBuffer-ansi-term
   "tp" 'org-cut-special
@@ -627,10 +680,10 @@ scroll-down-aggressively 0.01)
 
 ;; my Bookmarks
 
-(global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
-
+(global-set-key (kbd "<f4>") (lambda() (interactive)(find-file "~/org/wiki/Linux/Linux.org")))
 (global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/org/wiki/Semestre5/Semestre_5.org")))
-
+(global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
+(global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/Sync/TODO.org")))
 ;; to show matching brackets
 
 

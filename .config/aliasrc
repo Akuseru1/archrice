@@ -31,6 +31,7 @@ alias ka="killall" \
 	p="python" \
 	c="cp /home/arch/Documents/Projects/myfirstC/.ycm_extra_conf.py ." \
 	cfl="sudo vim /etc/X11/xorg.conf.d/00-keyboard.conf"\
+	ra="ranger"\
 	pm='pomodoro.sh --volume --1'
 
 command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" # Use neovim for vim if present.

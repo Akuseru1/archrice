@@ -3,10 +3,13 @@
 #	$TERMINAL -e python /home/arch/Documents/coolApps/terminal-pomodoro/py_alarm.py --volume 1
 super + Return
 	$TERMINAL
+
+super + v
+	emacs ~/org/TODO.org
 super + shift + p
 	$TERMINAL -e solaar config 1 fn-swap False
 super + i
-	$TERMINAL -e emacs -nw
+	emacs
 super + d
 	dmenu_run
 super + r
