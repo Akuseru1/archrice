@@ -4,8 +4,8 @@
 # -R restores the last colorscheme that was in use.
 wal -R
 [ -f "$HOME/.xprofile" ] && . ~/.xprofile
-[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
-setxkbmap -model pc104 -layout latam,latam -variant ,colemak -option grp:win_space_toggle
+#[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
+setxkbmap -model pc104 -layout latam,latam -variant colemak, -option grp:win_space_toggle
 exec i3
 
 
