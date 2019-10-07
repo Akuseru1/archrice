@@ -27,7 +27,8 @@
 (setq auto-window-vscroll nil)
 (setq-default display-line-numbers 'relative)
 
-
+;disable start screen
+(setq inhibit-startup-screen t)
 
 
 ;this installs use-package
@@ -365,10 +366,13 @@
 
 
 ;; adds more options to TODO in org
-
-(setq org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-
-(setq org-todo-keyword-faces
+(setq org-agenda-files '("~/org"))
+(require 'org-mouse) ;; to check checkboxes with mouse
+(setq org-priority-faces '((65 :foreground "#e45649")
+			   (66 :foreground "green")
+			   (67 :foreground "blue"))
+ org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+ org-todo-keyword-faces
 
       '(("TODO":foreground "purple" :weight bold :underline t)
 
@@ -446,17 +450,23 @@
 ;;to follow links in org mode you have to put (org-open-at-point) in the function file
 (evil-leader/set-key
   "w" 'avy-goto-char
+  "c" 'org-toggle-checkbox
+  "/s" 'org-sparse-tree ;both not in doom
+  "/t" 'org-tags-sparse-tree
   "b" 'switch-to-buffer
-  "<f1>" 'bookmark-bmenu-list
-  "<f2>" 'bookmark-set-no-overwrite
-  "<f3>" 'bookmark-jump
+  "<f1>" '(lambda() (interactive)(find-file "~/org/TODO.org"))
+  "<f2>" 'bookmark-bmenu-list
+  "<f3>" 'bookmark-set-no-overwrite
+  "<f4>" 'bookmark-jump
   "d" 'diff-buffer-with-file
   "r" 'dired
   "l" (if (bound-and-true-p org-mode) 'org-open-at-point 'Info-history-back)
   "ms" 'org-stored-links
   "ml" 'org-insert-link
-  "o" 'org-insert-heading-respect-content
-  "tt" 'org-todo
+  "oo" 'org-insert-heading-respect-content
+  "oat" 'org-todo-list
+  "oat" 'org-tags-view
+  "oaa" 'org-agenda
   "td" 'dired-open-term
   "tn" 'newBuffer-ansi-term
   "tp" 'org-cut-special
@@ -469,9 +479,11 @@
   "ss" 'flyspell-mode
 ;  "sp" 'split-window-horizontally ;; C-x 3 does this already
   "sb" 'flyspell-buffer
+  "mt" 'org-todo
+  "mq" 'org-set-tags
   "ma" 'which-key-show-top-level
   "mm" 'which-key-show-major-mode
-  "gs" 'magit-status
+  "gg" 'magit-status
   "gl" 'magit-log-all
   "gi" 'magit-init
   "gb" 'magit-branch
@@ -680,7 +692,9 @@ scroll-down-aggressively 0.01)
 
 ;; my Bookmarks
 
-(global-set-key (kbd "<f4>") (lambda() (interactive)(find-file "~/org/wiki/Linux/Linux.org")))
+(global-set-key (kbd "<f2>") (lambda() (interactive)(find-file "~/org/Monthly.org")))
+(global-set-key (kbd "<f3>") (lambda() (interactive)(find-file "~/org/wiki/Linux/Linux.org")))
+(global-set-key (kbd "<f4>") (lambda() (interactive)(find-file "~/org/wiki/Apps/Apps.org")))
 (global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/org/wiki/Semestre5/Semestre_5.org")))
 (global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
 (global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/Sync/TODO.org")))
@@ -755,7 +769,6 @@ scroll-down-aggressively 0.01)
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/org/wiki/exporting.org")))
  '(package-selected-packages
    (quote
     (org-ref nlinum-relative flycheck xclip evil-magit magit diff-hl))))
