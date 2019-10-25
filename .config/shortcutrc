@@ -34,3 +34,4 @@ cfl="$EDITOR /etc/X11/xorg.conf.d/00-keyboard.conf" \
 cfr="$EDITOR ~/.config/ranger/rc.conf" \
 cfs="$EDITOR ~/.config/shortcutrc" \
 cfe="$EDITOR ~/.emacs.d/init.el" \
+cfv="$EDITOR ~/.config/backupCode/User/settings.json" \

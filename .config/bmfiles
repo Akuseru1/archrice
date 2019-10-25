@@ -20,3 +20,4 @@ cfl	/etc/X11/xorg.conf.d/00-keyboard.conf
 cfr	~/.config/ranger/rc.conf
 cfs	~/.config/shortcutrc
 cfe	~/.emacs.d/init.el
+cfv	~/.config/backupCode/User/settings.json

@@ -1,6 +1,5 @@
 #!/bin/sh
 #adding it here works if you deactivate the caps line, but escape for caps stops working
-sxhkd & # Bind keys
 # Switch to US international with Caps as Mod/Escape
 setxkbmap -option caps:super -variant altgr-intl && killall xcape 2>/dev/null ; xcape -e 'Super_L=Escape' &
 setbg &		# Set the background

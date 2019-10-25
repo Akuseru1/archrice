@@ -307,7 +307,7 @@
 ;; remaps my alt gr key to work as meta
 
 (define-key key-translation-map (kbd "»") (kbd "M-x"))
-(global-set-key (kbd "”")   'evil-leader-mode)
+(global-set-key (kbd "•") 'evil-leader-mode)
 (global-set-key (kbd "½") 'shrink-window)
 (global-set-key (kbd "ĸ") 'enlarge-window)
 (global-set-key (kbd "ħ") 'shrink-window-horizontally)
@@ -364,12 +364,21 @@
 
 (add-hook 'after-save-hook 'kdm/org-save-and-export)
 
+;; this is so my schedule gets automatically updated on save
+
+(defun dropbox_upload_schedule ()
+  (interactive)
+  (setq file "TODO.org")
+  (setq sync "rclone copy ~/org/ Dropbox:rclone")
+  (if (equal (buffer-name) file) (shell-command sync)))
+      
+(add-hook 'after-save-hook 'dropbox_upload_schedule)
 
 ;; adds more options to TODO in org
 (setq org-agenda-files '("~/org"))
 (require 'org-mouse) ;; to check checkboxes with mouse
 (setq org-priority-faces '((65 :foreground "#e45649")
-			   (66 :foreground "green")
+			   (66 :foreground "yellow")
 			   (67 :foreground "blue"))
  org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
  org-todo-keyword-faces
@@ -454,10 +463,11 @@
   "/s" 'org-sparse-tree ;both not in doom
   "/t" 'org-tags-sparse-tree
   "b" 'switch-to-buffer
+  "ob" 'bookmark-bmenu-list
   "<f1>" '(lambda() (interactive)(find-file "~/org/TODO.org"))
-  "<f2>" 'bookmark-bmenu-list
-  "<f3>" 'bookmark-set-no-overwrite
-  "<f4>" 'bookmark-jump
+  "<f2>" '(lambda() (interactive)(find-file "~/org/Personal.org"))
+  "<f3>" '(lambda() (interactive)(find-file "~/org/Watchlist.org"))
+  "<f4>" '(lambda() (interactive)(find-file "~/org/Spain.org"))
   "d" 'diff-buffer-with-file
   "r" 'dired
   "l" (if (bound-and-true-p org-mode) 'org-open-at-point 'Info-history-back)
@@ -465,8 +475,9 @@
   "ml" 'org-insert-link
   "oo" 'org-insert-heading-respect-content
   "oat" 'org-todo-list
-  "oat" 'org-tags-view
-  "oaa" 'org-agenda
+  "oaq" 'org-tags-view
+  "oas" 'org-agenda-month-view
+  "oaa" 'org-agenda-list
   "td" 'dired-open-term
   "tn" 'newBuffer-ansi-term
   "tp" 'org-cut-special
@@ -480,8 +491,11 @@
 ;  "sp" 'split-window-horizontally ;; C-x 3 does this already
   "sb" 'flyspell-buffer
   "mt" 'org-todo
+  "mb" 'bookmark-set-no-overwrite
   "mq" 'org-set-tags
   "ma" 'which-key-show-top-level
+  "md" 'org-deadline
+  "ms" 'org-schedule
   "mm" 'which-key-show-major-mode
   "gg" 'magit-status
   "gl" 'magit-log-all
@@ -697,7 +711,7 @@ scroll-down-aggressively 0.01)
 (global-set-key (kbd "<f4>") (lambda() (interactive)(find-file "~/org/wiki/Apps/Apps.org")))
 (global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/org/wiki/Semestre5/Semestre_5.org")))
 (global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
-(global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/Sync/TODO.org")))
+;;(global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/org/TODO.org")))
 ;; to show matching brackets
 
 
